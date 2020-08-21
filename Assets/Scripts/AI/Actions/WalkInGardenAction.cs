@@ -7,6 +7,7 @@ using UnityEngine;
 public class WalkInGardenAction : GoapAction
 {
     public float Duration;
+    public float LastWalkTime;
 
     private bool visited;
     private float startTime;
@@ -14,7 +15,9 @@ public class WalkInGardenAction : GoapAction
 
     public WalkInGardenAction()
     {
+        AddPrecondition("NeedVisitGarden", true);
         AddEffect("GardenVisited", true);
+        AddEffect("HaveFun", true);
     }
 
     private void Start()
@@ -38,6 +41,7 @@ public class WalkInGardenAction : GoapAction
             if (totalPoints > finalTarget.Item2)
                 finalTarget = Tuple.Create(garden, totalPoints);
         }
+
         target = finalTarget.Item1.gameObject;
         return true;
     }
@@ -53,8 +57,10 @@ public class WalkInGardenAction : GoapAction
             startTime = Time.time;
         if (Time.time - startTime > Duration)
         {
+            Saturn.Act(cost);
             visited = true;
             target.GetComponent<GardenBed>().LastVisitTime = Time.time + UnityEngine.Random.Range(-5, 5);
+            LastWalkTime = Time.time;
         }
         return true;
     }

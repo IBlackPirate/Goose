@@ -9,10 +9,10 @@ public class CameraController : MonoBehaviour
     public float RotationSpeed = 60f;
 
     public float MinAngle = -60f;
-    public float MaxAngle = 5f;
+    public float MaxAngle = -5f;
 
-    public float MinZoom = 3f;
-    public float MaxZoom = 40f;
+    public float MinZoom = 8f;
+    public float MaxZoom = 11.3f;
     public float currentZoom;
     public float previousZoom;
 

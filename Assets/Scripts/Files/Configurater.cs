@@ -10,7 +10,8 @@ class Configurater:MonoBehaviour
             CurrentConfig.Level = 1;
             CurrentConfig.IsFullScreen = false;
             CurrentConfig.Quality = 3;
-            CurrentConfig.Volume = 1;
+            CurrentConfig.MenuVolume = 1;
+            CurrentConfig.GameVolume = 1;
             CurrentConfig.Resolution = Screen.resolutions.Length - 1;
         }
     }

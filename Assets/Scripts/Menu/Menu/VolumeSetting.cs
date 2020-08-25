@@ -1,21 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class VolumeSetting : MonoBehaviour
 {
-    Slider VolumeSlider;
+    public AudioMixerGroup Mixer;
 
-    public void Start()
+    public void MenuVolumePressed(float volume)
     {
-        VolumeSlider = gameObject.GetComponent<Slider>();
-        VolumeSlider.value = CurrentConfig.Volume;
+        CurrentConfig.MenuVolume = volume;
+        Mixer.audioMixer.SetFloat("MenuVolume", Mathf.Lerp(-80, 0, volume));
     }
 
-    public void VolumePressed()
+    public void GameVolumePressed(float volume)
     {
-        CurrentConfig.Volume = VolumeSlider.value;
-        AudioListener.volume = VolumeSlider.value;
+        CurrentConfig.GameVolume = volume;
+        Mixer.audioMixer.SetFloat("GameVolume", Mathf.Lerp(-80, 0, volume));
     }
 }

@@ -9,7 +9,8 @@ static class CurrentConfig
     public static bool IsFullScreen { get; set; }
     public static int Resolution { get; set; }
     public static int Quality { get; set; }
-    public static float Volume { get; set; }
+    public static float MenuVolume { get; set; }
+    public static float GameVolume { get; set; }
 
     public static string FileName = "CurrentConfig";
 
@@ -31,7 +32,8 @@ static class CurrentConfig
         IsFullScreen = bool.Parse(config["IsFullScreen"]);
         Resolution = int.Parse(config["Resolution"]);
         Quality = int.Parse(config["Quality"]);
-        Volume = float.Parse(config["Volume"]);
+        MenuVolume = float.Parse(config["MenuVolume"]);
+        GameVolume = float.Parse(config["GameVolume"]);
     }
 
     public static void OnQuit()
@@ -39,7 +41,8 @@ static class CurrentConfig
         var config = new Dictionary<string, string>();
         config["Level"] = Level.ToString();
         config["IsFullScreen"] = IsFullScreen.ToString();
-        config["Volume"] = Volume.ToString();
+        config["MenuVolume"] = MenuVolume.ToString();
+        config["GameVolume"] = GameVolume.ToString();
         config["Quality"] = Quality.ToString();
         config["Resolution"] = Resolution.ToString();
         Ini.Save(FileName, config);

@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class MovingController : MonoBehaviour
 {
-    public float MoveSpeed = 0.7f;
+    public float MoveSpeed;
 
-    AnimationController animationController;
+    private float baseMoveSpeed = 0.7f;
+    private AnimationController animationController;
 
     private void Start()
     {
+        MoveSpeed = baseMoveSpeed;
         animationController = GetComponent<AnimationController>();
     }
 
@@ -39,8 +42,17 @@ public class MovingController : MonoBehaviour
 
             // Anim Rotate
         }
-
     }
 
+    // Меняем скорость в зависимости от веса схваченного предмета
+    public void OnGrab(int weight)
+    {
+        MoveSpeed *= (10 - weight) / 20;
+    }
+
+    public void OnThrow()
+    {
+        MoveSpeed = baseMoveSpeed;
+    }
 }
 

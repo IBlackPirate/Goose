@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 2625814056738716114}
   - component: {fileID: 2625814056738716125}
   - component: {fileID: 2625814056738716124}
-  - component: {fileID: 679010754}
   m_Layer: 5
   m_Name: Botton
   m_TagString: Untagged
@@ -200,7 +199,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 679010754}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: StartPressed
         m_Mode: 1
@@ -212,16 +211,3 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &679010754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2625814056738716121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e9aee0982013b49829eb8e9fcfb059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Canvas: {fileID: 0}

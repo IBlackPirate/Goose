@@ -11,8 +11,8 @@ public class CameraController : MonoBehaviour
     public float MinAngle = -60f;
     public float MaxAngle = -5f;
 
-    public float MinZoom = 8f;
-    public float MaxZoom = 11.3f;
+    public float MinZoom = 5f;
+    public float MaxZoom = 9f;
     public float currentZoom;
     public float previousZoom;
 
@@ -28,6 +28,9 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Time.timeScale == 0)
+            return;
+
         ApplyZoom();
         ApplyRotation();
 
@@ -83,19 +86,21 @@ public class CameraController : MonoBehaviour
         if (Input.GetMouseButton(2))
         {
             var deltaY = Input.GetAxis("Mouse Y");
-            zoom =  ZoomSpeed * Time.deltaTime / Time.timeScale * deltaY;
+            zoom =  ZoomSpeed * Time.deltaTime * deltaY;
         }
         else
         {
             var heigth = Input.GetAxis("Mouse ScrollWheel");
-            zoom =  ZoomScrollSpeed * Time.deltaTime / Time.timeScale * heigth;
+            zoom =  ZoomScrollSpeed * Time.deltaTime * heigth;
         }
-        previousZoom = currentZoom;
-        currentZoom += zoom;
-        currentZoom = Mathf.Clamp(currentZoom, MinZoom, MaxZoom);
-        transform.position += transform.forward * (currentZoom-previousZoom);
-        transform.LookAt(Target);
-        
+        if (zoom != 0)
+        {
+            previousZoom = currentZoom;
+            currentZoom += zoom;
+            currentZoom = Mathf.Clamp(currentZoom, MinZoom, MaxZoom);
+            transform.position += transform.forward * (currentZoom - previousZoom);
+            transform.LookAt(Target);
+        }
     }
     #endregion
 }

@@ -9,6 +9,15 @@ public class WaterGardenAction : GoapAction
 
     private bool watered;
     private float startTime;
+    private Cup cup;
+
+    private FindCupAction findCupAction;
+
+    private void Start()
+    {
+        findCupAction = gameObject.GetComponent<FindCupAction>();
+        cup = findCupAction.Cup;
+    }
 
     public WaterGardenAction()
     {
@@ -37,11 +46,22 @@ public class WaterGardenAction : GoapAction
     {
         if (startTime == 0)
             startTime = Time.time;
-        if(Time.time - startTime > Duration)
+
+        var garden = target.GetComponent<GardenBed>();
+
+        if (!garden.IsAlive)
+            return false;
+
+        if (!cup.WaterSpill.isPlaying)
+        {
+            cup.WaterSpill.Play();
+            garden.OnWatering();
+        }
+
+        if (Time.time - startTime > Duration && !watered)
         {
             watered = true;
-            var garden = target.GetComponent<GardenBed>();
-            garden.LastWaterTime = Time.time;
+            cup.GardenWateringCount--;
             Saturn.NeedWatering.Remove(garden);
             Saturn.Act(cost);
         }

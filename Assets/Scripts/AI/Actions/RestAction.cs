@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RestAction : GoapAction
 {
+    public AudioSource Sleeping;
+    public AudioSource Yawn;
     public float Duration;
     public GameObject Bed;
     public float LastRestTime;
@@ -34,8 +36,12 @@ public class RestAction : GoapAction
     {
         if (startTime == 0)
             startTime = Time.time;
+        if (!Sleeping.isPlaying)
+            Sleeping.Play();
         if (Time.time - startTime > Duration)
         {
+            Sleeping.Stop();
+            Yawn.Play();
             LastRestTime = Time.time;
             rested = true;
             Saturn.OnRest();

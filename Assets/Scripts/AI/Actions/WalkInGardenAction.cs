@@ -33,6 +33,8 @@ public class WalkInGardenAction : GoapAction
         Tuple<GardenBed, float> finalTarget = Tuple.Create<GardenBed, float>(null, -500);
         foreach (var garden in gardens)
         {
+            if (!garden.IsAlive)
+                continue;
             var distancePoints = -(garden.transform.position - transform.position).sqrMagnitude;
             var visitPoints = (Time.time - garden.LastVisitTime) * 40;
             var attractiveness = garden.Attractiveness * 300;

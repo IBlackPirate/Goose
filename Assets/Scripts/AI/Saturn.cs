@@ -6,24 +6,27 @@ using UnityEngine.AI;
 public class Saturn : MonoBehaviour, IGoap
 {
     public static Saturn Instance;
+    public AudioSource Steps;
+    public float Angry;
+    public float AngryRegen;
     public float DefaultEnergy = 80;
     public float PathCompleteDistance;
 
     private NavMeshAgent agent;
     private WalkInGardenAction gardenAction;
     private RestAction restAction;
-    private float energy;
+    public float Energy { get; private set; }
 
     public static HashSet<GardenBed> NeedWatering;
 
     public static void OnRest()
     {
-        Instance.energy = Instance.DefaultEnergy;
+        Instance.Energy = Instance.DefaultEnergy;
     }
 
     public static void Act(float cost)
     {
-        Instance.energy -= cost;
+        Instance.Energy -= cost;
     }
 
     private void Start()
@@ -33,6 +36,13 @@ public class Saturn : MonoBehaviour, IGoap
         agent = gameObject.GetComponent<NavMeshAgent>();
         gardenAction = gameObject.GetComponent<WalkInGardenAction>();
         restAction = gameObject.GetComponent<RestAction>();
+        OnRest();
+    }
+
+    private void Update()
+    {
+        Angry -= AngryRegen * Time.deltaTime;
+        Angry = Mathf.Clamp(Angry, 0, 1);
     }
 
     public void ActionsFinished()
@@ -44,16 +54,21 @@ public class Saturn : MonoBehaviour, IGoap
     {
         HashSet<KeyValuePair<string, object>> goal = new HashSet<KeyValuePair<string, object>>();
 
-        if (energy <= 0)
+        if (Energy <= 0)
         {
             goal.Add(new KeyValuePair<string, object>("HasRest", true));
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.Sleeping);
         }
         else if (NeedWatering.Count > 0)
         {
             goal.Add(new KeyValuePair<string, object>("GardenWatered", true));
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.FindWaterCan);
         }
-
-        goal.Add(new KeyValuePair<string, object>("HaveFun", true));
+        else
+        {
+            goal.Add(new KeyValuePair<string, object>("GardenVisited", true));
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.Flowers);
+        }
 
         return goal;
     }
@@ -63,11 +78,14 @@ public class Saturn : MonoBehaviour, IGoap
         HashSet<KeyValuePair<string, object>> worldData = new HashSet<KeyValuePair<string, object>>();
         worldData.Add(new KeyValuePair<string, object>("NeedVisitGarden", true));
         worldData.Add(new KeyValuePair<string, object>("NeedRest", true));
+        worldData.Add(new KeyValuePair<string, object>("NeedWatering", NeedWatering.Count > 0));
         return worldData;
     }
 
     public bool MoveAgent(GoapAction nextAction)
     {
+        if (!Steps.isPlaying)
+            Steps.Play();
         if (agent.destination != nextAction.target.transform.position)
         {
             agent.SetDestination(nextAction.target.transform.position);
@@ -77,8 +95,10 @@ public class Saturn : MonoBehaviour, IGoap
         {
             nextAction.setInRange(true);
             agent.isStopped = true;
+            Steps.Stop();
             return true;
         }
+        Energy -= Time.deltaTime;
         return false;
     }
 

@@ -5,10 +5,11 @@ using UnityEngine;
 public class FindCupAction : GoapAction
 {
     public float GrabDistance;
+    public float CupNotFoundAngry = 0.15f;
 
     public Transform DefaultCupPlace;
     public Transform HandedCupPlace;
-    public GameObject Cup;
+    public Cup Cup;
 
 
     private bool checkedDefaultPlace;
@@ -16,22 +17,30 @@ public class FindCupAction : GoapAction
 
     public FindCupAction()
     {
+        AddPrecondition("NeedWatering", true);
         AddEffect("HasCup", true);
-    }
+    }      
 
     public override bool CheckProceduralPrecondition(GameObject agent)
     {
+
+        if (Saturn.NeedWatering.Count == 0 || Saturn.Instance.Energy <= 0)
+            return false;
+
         if (CheckCup())
         {
             hasCup = true;
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.FullWaterCan);
             return true;
         }
 
         if (!checkedDefaultPlace)
+        {
             target = DefaultCupPlace.gameObject;
+        }
         else
         {
-            target = Cup;
+            target = Cup.gameObject;
         }
         return true;
     }
@@ -52,6 +61,8 @@ public class FindCupAction : GoapAction
         if (!checkedDefaultPlace && Vector3.Distance(Cup.transform.position, DefaultCupPlace.position) > 1.5f)
         {
             checkedDefaultPlace = true;
+            Saturn.Instance.Angry += CupNotFoundAngry;
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.NotFoundWaterCan);
             return false;
         }
 
@@ -62,6 +73,7 @@ public class FindCupAction : GoapAction
             Cup.GetComponent<Rigidbody>().isKinematic = true;
             hasCup = true;
             checkedDefaultPlace = false;
+            Saturn_UI.Instance.SelectEmotion(Saturn_UI.Instance.FullWaterCan);
         }
 
         return true;

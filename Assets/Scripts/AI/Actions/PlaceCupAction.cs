@@ -13,7 +13,7 @@ public class PlaceCupAction : GoapAction
         AddEffect("CupPlaced", true);
     }
 
-    private void Start()
+    private void Awake()
     {
         findCupAction = gameObject.GetComponent<FindCupAction>();
     }

@@ -40,19 +40,33 @@ public class MovingController : MonoBehaviour
         {
             transform.Rotate(Vector3.up, hor);
 
-            // Anim Rotate
-        }
+            if (hor > 0)
+            {
+                if (animationController.IsDown)
+                    animationController.RotateRightDown();
+                else
+                    animationController.RotateRight();
+            }
+
+            else
+            {
+                if (animationController.IsDown)
+                    animationController.RotateLeftDown();
+                else
+                    animationController.RotateLeft();
+            }
+            }
     }
 
-    // Меняем скорость в зависимости от веса схваченного предмета
-    public void OnGrab(int weight)
-    {
-        MoveSpeed *= (10 - weight) / 20;
-    }
+    //// Меняем скорость в зависимости от веса схваченного предмета
+    //public void OnGrab(int weight)
+    //{
+    //    MoveSpeed *= (10 - weight) / 20;
+    //}
 
-    public void OnThrow()
-    {
-        MoveSpeed = baseMoveSpeed;
-    }
+    //public void OnThrow()
+    //{
+    //    MoveSpeed = baseMoveSpeed;
+    //}
 }
 

@@ -8,4 +8,20 @@ public class Interactable : MonoBehaviour
     public int Weight = 1;
     // Хранит позицию относительно гуся, к которой прикрепляется данный предмет при взаимодействии
     public Vector3 PointToHoldOn;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            GetComponent<Outline>().enabled = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            GetComponent<Outline>().enabled = false;
+        }
+    }
 }

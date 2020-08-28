@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GooseSoundController : MonoBehaviour
 {
+    public AnimationController GooseAnimation;
+
     private AudioSource[] audioList;
 
     void Start()
@@ -15,6 +17,7 @@ public class GooseSoundController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            GooseAnimation.Ga();
             var rand = Random.Range(0, audioList.Length);
             audioList[rand].Play();
         }
